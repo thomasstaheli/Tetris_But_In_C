@@ -1,0 +1,3 @@
+C:/Users/thoma/CLionProjects/Tetris_But_In_C/cmake-build-debug/CMakeFiles/name.dir
+C:/Users/thoma/CLionProjects/Tetris_But_In_C/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/thoma/CLionProjects/Tetris_But_In_C/cmake-build-debug/CMakeFiles/rebuild_cache.dir
