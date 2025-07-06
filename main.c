@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 
   init_display(display);
 
-  // ...
+  play_tetris(game, display);
 
   remove_display(display);
 

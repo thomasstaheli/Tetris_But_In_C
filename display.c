@@ -3,6 +3,7 @@
 //
 #include "display.h"
 #include "stdio.h"
+#include "settings.h"
 
 typedef struct {
     uint8_t r, g, b, a;

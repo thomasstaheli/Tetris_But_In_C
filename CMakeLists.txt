@@ -11,6 +11,9 @@ set(PRJ_SOURCE_FILES
         display.c
         tetris.c
         tetris.h
+        board.h
+        board.c
+        settings.h
 )
 
 # Création de l'exécutable

@@ -7,9 +7,6 @@
 
 #include <SDL.h>
 
-#define DISPLAY_WIDTH   1000
-#define DISPLAY_HEIGHT  1000
-
 typedef struct {
     SDL_Window    *window;
     SDL_Renderer  *renderer;
