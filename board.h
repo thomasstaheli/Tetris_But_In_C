@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 typedef enum {
-    EMPTY, SQUARE, RECTANGLE, S_SHAPE, Z_SHAPE, L_SHAPE, J_SHAPE, T_SHAPE
+    EMPTY, SQUARE, RECTANGLE, S_SHAPE, Z_SHAPE, L_SHAPE, J_SHAPE, T_SHAPE, ERROR
 } Shape;
 
 typedef struct {
@@ -17,13 +17,13 @@ typedef struct {
   Shape array[BOARD_HEIGHT][BOARD_WIDTH];
   // Functions pointers
   void  (*init_board)(struct Board *board, Shape value);
-  void  (*display)(struct Board *);
+  void  (*display_board)(struct Board *);
   Shape (*get)(struct Board *, uint8_t x, uint8_t y);
   int   (*put)(struct Board *, uint8_t x, uint8_t y, Shape value);
 } Board;
 
 void  init_board(Board *board, Shape value);
-void  display(Board *board);
+void  display_board(Board *board);
 Shape get(Board *board, uint8_t x, uint8_t y);
 int   put(Board *board, uint8_t x, uint8_t y, Shape value);
 

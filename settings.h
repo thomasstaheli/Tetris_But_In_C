@@ -14,4 +14,7 @@
 #define DISPLAY_WIDTH   800
 #define DISPLAY_HEIGHT  800
 
+// MENU BAR SIZE
+#define MENU_BAR_SIZE   300
+
 #endif //NAME_SETTINGS_H

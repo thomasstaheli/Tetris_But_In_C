@@ -3,14 +3,21 @@
 //
 #include "display.h"
 #include "tetris.h"
-#include <stdbool.h>
 
 void play_tetris(Tetris_game *game, SDL_display *display) {
 
-  bool close = false;
+  game->board.init_board = (void (*)(struct Board *, Shape)) init_board;
+  game->board.display_board = (void (*)(struct Board *)) display_board;
+  game->board.put = (int (*)(struct Board *, uint8_t, uint8_t, Shape)) put;
+  game->board.get = (Shape (*)(struct Board *, uint8_t, uint8_t)) get;
+
+  game->running = true;
+  game->board.init_board((struct Board *) &game->board, EMPTY);
+  // TODO : USING ONLY FOR DEBUG
+  game->board.display_board((struct Board *) &game->board);
 
   // animation loop
-  while (!close) {
+  while (game->running) {
     SDL_Event event;
 
     // Events management
@@ -19,7 +26,7 @@ void play_tetris(Tetris_game *game, SDL_display *display) {
 
         case SDL_QUIT:
           // handling of close button
-          close = 1;
+          game->running = false;
           break;
 
         case SDL_KEYDOWN:
@@ -47,9 +54,7 @@ void play_tetris(Tetris_game *game, SDL_display *display) {
       }
     }
 
-    // clears the screen
-    SDL_RenderClear(display->renderer);
-    // SDL_RenderCopy(display->renderer, tex, NULL, &dest);
+    draw_grid_game(display);
 
     // triggers the double buffers
     // for multiple rendering
