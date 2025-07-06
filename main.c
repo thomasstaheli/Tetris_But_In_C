@@ -20,11 +20,13 @@ int main(int argc, char *argv[]) {
     goto err_game_malloc;
   }
 
+  display->game = game;
+
   printf("Starting game ...\n");
 
   init_display(display);
 
-  play_tetris(game, display);
+  play_tetris(display);
 
   remove_display(display);
 

@@ -17,6 +17,16 @@ void init_board(Board *board, Shape value) {
       board->put((struct Board *) board, line, col, value);
     }
   }
+
+  // TODO : REMOVE -> TO TEST COLOR
+  int line = BOARD_HEIGHT - 1;
+  board->put((struct Board *) board, line, 0, SQUARE);
+  board->put((struct Board *) board, line, 1, RECTANGLE);
+  board->put((struct Board *) board, line, 2, S_SHAPE);
+  board->put((struct Board *) board, line, 3, Z_SHAPE);
+  board->put((struct Board *) board, line, 4, T_SHAPE);
+  board->put((struct Board *) board, line, 5, J_SHAPE);
+  board->put((struct Board *) board, line, 6, L_SHAPE);
 }
 
 void display_board(Board *board) {
