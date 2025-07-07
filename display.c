@@ -95,7 +95,7 @@ void draw_board_game(SDL_display *display) {
 
 void play_tetris(SDL_display *display) {
 
-  // Setup the function pointer
+  // Set up the function pointer
   display->game->board.init_board = (void (*)(struct Board *, Shape)) init_board;
   display->game->board.display_board = (void (*)(struct Board *)) display_board;
   display->game->board.put = (int (*)(struct Board *, uint8_t, uint8_t, Shape)) put;
@@ -105,6 +105,8 @@ void play_tetris(SDL_display *display) {
   display->game->board.init_board((struct Board *) &display->game->board, EMPTY);
   // TODO : USING ONLY FOR DEBUG ONLY
   display->game->board.display_board((struct Board *) &display->game->board);
+
+  Shape shape_to_place;
 
   // animation loop
   while (display->game->running) {

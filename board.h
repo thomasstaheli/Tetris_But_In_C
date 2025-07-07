@@ -6,11 +6,8 @@
 #define NAME_BOARD_H
 
 #include "settings.h"
+#include "shape.h"
 #include <stdint.h>
-
-typedef enum {
-    EMPTY, SQUARE, RECTANGLE, S_SHAPE, Z_SHAPE, L_SHAPE, J_SHAPE, T_SHAPE, ERROR
-} Shape;
 
 typedef struct {
   // For each height we have one line of BOARD_WIDTH

@@ -9,7 +9,6 @@
 #include "tetris.h"
 #include "board.h" // TO assign Color to Shapes
 
-
 typedef struct {
     uint8_t r, g, b, a;
 } Color;
@@ -25,7 +24,7 @@ static const Color BLACK  = {0, 0, 0, 255};
 static const Color WHITE  = {255, 255, 255, 255};
 
 // Associate Color to Shapes (BLACK for EMPTY, YELLOW for SQUARE, ...)
-static const Color shapes_color[8] = {BLACK, YELLOW, CYAN, GREEN,
+static const Color shapes_color[NUMBER_OF_SHAPES + 1] = {BLACK, YELLOW, CYAN, GREEN,
                                       RED, ORANGE, BLUE, PURPLE};
 
 typedef struct {

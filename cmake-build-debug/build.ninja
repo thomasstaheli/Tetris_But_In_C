@@ -77,6 +77,13 @@ build CMakeFiles/name.dir/board.c.obj: C_COMPILER__name_unscanned_Debug C$:/User
   OBJECT_DIR = CMakeFiles\name.dir
   OBJECT_FILE_DIR = CMakeFiles\name.dir
 
+build CMakeFiles/name.dir/shape.c.obj: C_COMPILER__name_unscanned_Debug C$:/Users/thoma/CLionProjects/Tetris_But_In_C/shape.c || cmake_object_order_depends_target_name
+  DEP_FILE = CMakeFiles\name.dir\shape.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  INCLUDES = -Ic:/libs/sdl2/include
+  OBJECT_DIR = CMakeFiles\name.dir
+  OBJECT_FILE_DIR = CMakeFiles\name.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target name
@@ -85,7 +92,7 @@ build CMakeFiles/name.dir/board.c.obj: C_COMPILER__name_unscanned_Debug C$:/User
 #############################################
 # Link the executable name.exe
 
-build name.exe: C_EXECUTABLE_LINKER__name_Debug CMakeFiles/name.dir/main.c.obj CMakeFiles/name.dir/display.c.obj CMakeFiles/name.dir/tetris.c.obj CMakeFiles/name.dir/board.c.obj | c$:/libs/sdl2/lib/x64/SDL2main.lib c$:/libs/sdl2/lib/x64/SDL2.lib
+build name.exe: C_EXECUTABLE_LINKER__name_Debug CMakeFiles/name.dir/main.c.obj CMakeFiles/name.dir/display.c.obj CMakeFiles/name.dir/tetris.c.obj CMakeFiles/name.dir/board.c.obj CMakeFiles/name.dir/shape.c.obj | c$:/libs/sdl2/lib/x64/SDL2main.lib c$:/libs/sdl2/lib/x64/SDL2.lib
   FLAGS = -g
   LINK_LIBRARIES = c:/libs/sdl2/lib/x64/SDL2main.lib  c:/libs/sdl2/lib/x64/SDL2.lib  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\name.dir
