@@ -33,7 +33,16 @@ void affect_shape_to_board(Shape shape_type, Shape_Coord shape_coord, Board *boa
   }
 }
 
+void clear_shape_from_board(Shape_Coord shape_coord, Board *board) {
+  for(uint8_t i = 0; i < PIXEL_PER_SHAPES; ++i) {
+    board->put((struct Board *) board, shape_coord.coord[i].x, shape_coord.coord[i].y, EMPTY);
+  }
+}
+
 int can_shape_go_down(Shape_Coord new_shape_coord, Board board) {
   return 1;
 }
+
+
+
 

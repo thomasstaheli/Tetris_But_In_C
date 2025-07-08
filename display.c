@@ -117,7 +117,9 @@ void play_tetris(SDL_display *display) {
   Shape shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
   // Generate a new
   Shape_Coord new_shape_coord;
+  Shape_Coord old_shape_coord;
   spawn_new_shape(shape_to_place, shape_position, &new_shape_coord);
+  old_shape_coord = new_shape_coord;
   affect_shape_to_board(shape_to_place, new_shape_coord, &display->game->board);
 
   // TODO : REMOVE DEBUG USAGE ONLY
@@ -163,6 +165,11 @@ void play_tetris(SDL_display *display) {
           }
       }
     }
+
+    clear_shape_from_board(old_shape_coord, &display->game->board);
+    old_shape_coord = new_shape_coord;
+    compute_pixels_shape(shape_to_place, shape_position, &new_shape_coord);
+    affect_shape_to_board(shape_to_place, new_shape_coord, &display->game->board);
 
     clear_display(display);
     draw_board_game(display);
