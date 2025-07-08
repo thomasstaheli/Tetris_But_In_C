@@ -39,6 +39,7 @@ void clear_shape_from_board(Shape_Coord shape_coord, Board *board) {
   }
 }
 
+// TODO
 int can_shape_go_down(Shape_Coord new_shape_coord, Board board) {
   return 1;
 }

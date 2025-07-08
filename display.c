@@ -114,7 +114,8 @@ void play_tetris(SDL_display *display) {
   // Set up random (fixed time)
   srand(time(NULL));
   // Select a shape between 1 and 7 (0 = EMPTY)
-  Shape shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
+  // Shape shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
+  Shape shape_to_place = T_SHAPE;
   // Generate a new
   Shape_Coord new_shape_coord;
   Shape_Coord old_shape_coord;
