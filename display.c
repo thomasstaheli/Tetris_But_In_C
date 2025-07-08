@@ -1,9 +1,12 @@
 //
 // Created by thoma on 05.07.2025.
 //
-#include "display.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "display.h"
 #include "settings.h"
+
 
 void init_display(SDL_display *display) {
 
@@ -85,7 +88,7 @@ void draw_board_game(SDL_display *display) {
     rect.y = scare_height * line;
     for(uint8_t col = 0; col < BOARD_WIDTH; col++) {
       rect.x = scare_width * col;
-      color = shapes_color[display->game->board.get((struct Board *) &display->game->board, line, col)];
+      color = shapes_color[display->game->board.get((struct Board *) &display->game->board, col, line)];
       SDL_SetRenderDrawColor(display->renderer, color.r, color.g, color.b, color.a);
       SDL_RenderFillRect(display->renderer, &rect);
     }
@@ -103,10 +106,22 @@ void play_tetris(SDL_display *display) {
   // Init the game board
   display->game->running = true;
   display->game->board.init_board((struct Board *) &display->game->board, EMPTY);
-  // TODO : USING ONLY FOR DEBUG ONLY
+  // TODO : REMOVE DEBUG USAGE ONLY
   display->game->board.display_board((struct Board *) &display->game->board);
 
-  Shape shape_to_place;
+  // Default position of the shape
+  uint8_t shape_position = 0;
+  // Set up random (fixed time)
+  srand(time(NULL));
+  // Select a shape between 1 and 7 (0 = EMPTY)
+  Shape shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
+  // Generate a new
+  Shape_Coord new_shape_coord;
+  spawn_new_shape(shape_to_place, shape_position, &new_shape_coord);
+  affect_shape_to_board(shape_to_place, new_shape_coord, &display->game->board);
+
+  // TODO : REMOVE DEBUG USAGE ONLY
+  display->game->board.display_board((struct Board *) &display->game->board);
 
   // animation loop
   while (display->game->running) {
@@ -126,19 +141,22 @@ void play_tetris(SDL_display *display) {
           switch (event.key.keysym.scancode) {
             case SDL_SCANCODE_W:
             case SDL_SCANCODE_UP:
-              // ...
+              shape_position = (shape_position + 1) % POSITION_PER_SHAPES;
               break;
             case SDL_SCANCODE_A:
             case SDL_SCANCODE_LEFT:
-              // ...
+              // TODO Check if shape can do this move
+              new_shape_coord.coord[0].x += -1;
               break;
             case SDL_SCANCODE_S:
             case SDL_SCANCODE_DOWN:
-              // ...
+              // TODO Check if shape can do this move
+              new_shape_coord.coord[0].y += 1;
               break;
             case SDL_SCANCODE_D:
             case SDL_SCANCODE_RIGHT:
-              // ...
+              // TODO Check if shape can do this move
+              new_shape_coord.coord[0].x += 1;
               break;
             default:
               break;

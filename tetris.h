@@ -13,4 +13,7 @@ typedef struct {
     bool  running;
 } Tetris_game;
 
+void spawn_new_shape(Shape shape_to_place, uint8_t shape_position, Shape_Coord *new_shape_coord);
+void affect_shape_to_board(Shape shape_to_place, Shape_Coord shape_coord, Board *board);
+
 #endif //NAME_TETRIS_H

@@ -15,13 +15,13 @@ typedef struct {
   // Functions pointers
   void  (*init_board)(struct Board *board, Shape value);
   void  (*display_board)(struct Board *);
-  Shape (*get)(struct Board *, uint8_t x, uint8_t y);
-  int   (*put)(struct Board *, uint8_t x, uint8_t y, Shape value);
+  Shape (*get)(struct Board *, uint8_t col, uint8_t line);
+  int   (*put)(struct Board *, uint8_t col, uint8_t line, Shape value);
 } Board;
 
 void  init_board(Board *board, Shape value);
 void  display_board(Board *board);
-Shape get(Board *board, uint8_t x, uint8_t y);
-int   put(Board *board, uint8_t x, uint8_t y, Shape value);
+Shape get(Board *board, uint8_t col, uint8_t line);
+int   put(Board *board, uint8_t col, uint8_t line, Shape value);
 
 #endif //NAME_BOARD_H
