@@ -34,7 +34,7 @@ void display_board(Board *board) {
 }
 
 Shape get(Board *board, uint8_t col, uint8_t line) {
-  // x = selected line, y = selected case in the line x (column)
+  // x = selected case in the line x (column), y = selected line
   if(is_out_of_bound(col, line)) {
     return ERROR;
   }

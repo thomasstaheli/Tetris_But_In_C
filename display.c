@@ -115,7 +115,7 @@ void play_tetris(SDL_display *display) {
   srand(time(NULL));
   // Select a shape between 1 and 7 (0 = EMPTY)
   // Shape shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
-  Shape shape_to_place = T_SHAPE;
+  Shape shape_to_place = RECTANGLE;
   // Generate a new
   Shape_Coord new_shape_coord;
   Shape_Coord old_shape_coord;
@@ -148,18 +148,21 @@ void play_tetris(SDL_display *display) {
               break;
             case SDL_SCANCODE_A:
             case SDL_SCANCODE_LEFT:
-              // TODO Check if shape can do this move
-              new_shape_coord.coord[0].x += -1;
+              if(!shape_out_of_bound(new_shape_coord, -1, 0)) {
+                new_shape_coord.coord[0].x += -1;
+              }
               break;
             case SDL_SCANCODE_S:
             case SDL_SCANCODE_DOWN:
-              // TODO Check if shape can do this move
-              new_shape_coord.coord[0].y += 1;
+              if(!shape_out_of_bound(new_shape_coord, 0, -1)) {
+                new_shape_coord.coord[0].y += 1;
+              }
               break;
             case SDL_SCANCODE_D:
             case SDL_SCANCODE_RIGHT:
-              // TODO Check if shape can do this move
-              new_shape_coord.coord[0].x += 1;
+              if(!shape_out_of_bound(new_shape_coord, 1, 0)) {
+                new_shape_coord.coord[0].x += 1;
+              }
               break;
             default:
               break;
@@ -167,9 +170,16 @@ void play_tetris(SDL_display *display) {
       }
     }
 
-    clear_shape_from_board(old_shape_coord, &display->game->board);
+    if(!can_shape_go_down(old_shape_coord, display->game->board)) {
+      shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
+      shape_position = 0;
+      spawn_new_shape(shape_to_place, shape_position, &new_shape_coord);
+    } else {
+      clear_shape_from_board(old_shape_coord, &display->game->board);
+      compute_pixels_shape(shape_to_place, shape_position, &new_shape_coord);
+    }
+
     old_shape_coord = new_shape_coord;
-    compute_pixels_shape(shape_to_place, shape_position, &new_shape_coord);
     affect_shape_to_board(shape_to_place, new_shape_coord, &display->game->board);
 
     clear_display(display);

@@ -23,5 +23,6 @@ void  init_board(Board *board, Shape value);
 void  display_board(Board *board);
 Shape get(Board *board, uint8_t col, uint8_t line);
 int   put(Board *board, uint8_t col, uint8_t line, Shape value);
+int   is_out_of_bound(uint8_t col, uint8_t line);
 
 #endif //NAME_BOARD_H
