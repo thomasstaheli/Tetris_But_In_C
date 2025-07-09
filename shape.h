@@ -15,8 +15,10 @@ typedef enum {
     EMPTY, SQUARE, RECTANGLE, S_SHAPE, Z_SHAPE, L_SHAPE, J_SHAPE, T_SHAPE, ERROR
 } Shape;
 
+// Coord X and Y are integer to avoid underflow with unsigned type.
+// It makes condition test easier
 typedef struct {
-    uint8_t x, y;
+    int x, y;
 } Coord;
 
 // Each Shapes got 4 pixels

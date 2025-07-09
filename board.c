@@ -4,10 +4,10 @@
 #include "board.h"
 #include <stdio.h>
 
-int is_out_of_bound(uint8_t col, uint8_t line) {
+int is_out_of_bound(int col, int line) {
   // x = [0, BOARD_WIDTH[ AND y = [0, BOARD_HEIGHT[
   // Out of Bound ? Yes, return 1 else return 0
-  return !(col >= 0 && col < BOARD_WIDTH) || !(line >= 0 || line < BOARD_HEIGHT);
+  return !(col >= 0 && col < BOARD_WIDTH) || !(line < BOARD_HEIGHT);
 }
 
 void init_board(Board *board, Shape value) {

@@ -86,18 +86,33 @@ int can_shape_go_down(Shape_Coord shape_coord, Board board) {
   return 1;
 }
 
-int shape_out_of_bound(Shape_Coord shape_coord, int x_increment, int y_increment) {
+int shape_out_of_bound(Shape_Coord *shape_coord, int x_increment, int y_increment) {
   // For each pixel, check if it will be out of bound
   for(uint8_t i = 0; i < PIXEL_PER_SHAPES; ++i) {
-    shape_coord.coord[i].x += x_increment;
-    shape_coord.coord[i].y += y_increment;
+    shape_coord->coord[i].x += x_increment;
+    shape_coord->coord[i].y += y_increment;
 
-    if(is_out_of_bound(shape_coord.coord[i].x, shape_coord.coord[i].y)) {
+    if(is_out_of_bound(shape_coord->coord[i].x, shape_coord->coord[i].y)) {
       return 1;
     }
   }
 
   return 0;
+}
+
+void update_shapes_until_in_bound(Shape shape_to_place, uint8_t shape_position, Shape_Coord *shape_coord) {
+  // While shape is not in bound
+  int incr_decr = 0;
+
+  while(shape_out_of_bound(shape_coord, incr_decr, 0)) {
+    if(shape_coord->coord[0].x < BOARD_WIDTH / 2) {
+      // Shape is colliding with left side
+      incr_decr = 1;
+    } else {
+      // Shape is colliding with right side
+      incr_decr = -1;
+    }
+  }
 }
 
 

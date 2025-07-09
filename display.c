@@ -109,6 +109,8 @@ void play_tetris(SDL_display *display) {
   // TODO : REMOVE DEBUG USAGE ONLY
   display->game->board.display_board((struct Board *) &display->game->board);
 
+  // Count down before going down
+  uint16_t count_down = 0;
   // Default position of the shape
   uint8_t shape_position = 0;
   // Set up random (fixed time)
@@ -119,6 +121,7 @@ void play_tetris(SDL_display *display) {
   // Generate a new
   Shape_Coord new_shape_coord;
   Shape_Coord old_shape_coord;
+  Shape_Coord tmp_shape_coord;
   spawn_new_shape(shape_to_place, shape_position, &new_shape_coord);
   old_shape_coord = new_shape_coord;
   affect_shape_to_board(shape_to_place, new_shape_coord, &display->game->board);
@@ -145,23 +148,29 @@ void play_tetris(SDL_display *display) {
             case SDL_SCANCODE_W:
             case SDL_SCANCODE_UP:
               shape_position = (shape_position + 1) % POSITION_PER_SHAPES;
+              compute_pixels_shape(shape_to_place, shape_position, &new_shape_coord);
+              // Check if shapes is out of bound after changing position
+              update_shapes_until_in_bound(shape_to_place, shape_position, &new_shape_coord);
               break;
             case SDL_SCANCODE_A:
             case SDL_SCANCODE_LEFT:
-              if(!shape_out_of_bound(new_shape_coord, -1, 0)) {
-                new_shape_coord.coord[0].x += -1;
+              tmp_shape_coord = new_shape_coord;
+              if(!shape_out_of_bound(&tmp_shape_coord, -1, 0)) {
+                new_shape_coord = tmp_shape_coord;
               }
               break;
             case SDL_SCANCODE_S:
             case SDL_SCANCODE_DOWN:
-              if(!shape_out_of_bound(new_shape_coord, 0, -1)) {
-                new_shape_coord.coord[0].y += 1;
+              tmp_shape_coord = new_shape_coord;
+              if(!shape_out_of_bound(&tmp_shape_coord, 0, 1)) {
+                new_shape_coord = tmp_shape_coord;
               }
               break;
             case SDL_SCANCODE_D:
             case SDL_SCANCODE_RIGHT:
-              if(!shape_out_of_bound(new_shape_coord, 1, 0)) {
-                new_shape_coord.coord[0].x += 1;
+              tmp_shape_coord = new_shape_coord;
+              if(!shape_out_of_bound(&tmp_shape_coord, 1, 0)) {
+                new_shape_coord = tmp_shape_coord;
               }
               break;
             default:
