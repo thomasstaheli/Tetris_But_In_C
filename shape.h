@@ -22,7 +22,7 @@ typedef struct {
 } Coord;
 
 // Each Shapes got 4 pixels
-// Coord[0] = Shapes origine
+// Coord[0] = Shapes origin
 typedef struct {
     Coord coord[PIXEL_PER_SHAPES];
 } Shape_Coord;

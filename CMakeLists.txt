@@ -14,7 +14,6 @@ set(PRJ_SOURCE_FILES
         board.h
         board.c
         settings.h
-        shape.c
         shape.h
 )
 

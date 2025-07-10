@@ -2,7 +2,6 @@
 // Created by thoma on 05.07.2025.
 //
 #include <stdint.h>
-#include "display.h"
 #include "tetris.h"
 #include "shape.h"
 
@@ -69,8 +68,10 @@ uint8_t get_colliding_pixels(Shape_Coord shape_coord, Shape_Coord *colliding_pix
 }
 
 int can_shape_go_down(Shape_Coord shape_coord, Board board) {
+  // Check if the shapes can go down one more time
   int coord_x;
   int coord_y;
+  // Will contain all the collidings pixels
   Shape_Coord colliding_pixels;
   uint8_t nb_colliding = get_colliding_pixels(shape_coord, &colliding_pixels);
   // For each pixel, check
@@ -115,6 +116,37 @@ void update_shapes_until_in_bound(Shape shape_to_place, uint8_t shape_position, 
   }
 }
 
+// start_line contain the line to erase
+void erase_full_line(Board *board, uint8_t erase_line_idx) {
 
+  for(uint8_t line = erase_line_idx; line > 0; --line) {
+    for(uint8_t col = 0; col < BOARD_WIDTH; ++col) {
+      // Take the value above
+      Shape tmp = board->get((struct Board *) board, col, line - 1);
+      // Paste the above value
+      board->put((struct Board *) board, col, line, tmp);
+    }
+  }
+  // The line on the top will be EMPTY
+  for(uint8_t col = 0; col < BOARD_WIDTH; ++col) {
+    board->put((struct Board *) board, col, 0, EMPTY);
+  }
+}
 
+void check_for_full_lines(Board *board) {
+
+  for(uint8_t line = 0; line < BOARD_HEIGHT; ++line) {
+    for(uint8_t col = 0; col < BOARD_WIDTH; ++col) {
+      // Check EMPTY pixel
+      if(board->get((struct Board *) board, col, line) == EMPTY) {
+        break;
+      } // If it is the last pixel which is empty
+      else if(col == BOARD_WIDTH - 1) {
+        // Update the board
+        erase_full_line(board, line);
+      }
+    }
+  }
+
+}
 

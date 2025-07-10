@@ -5,12 +5,12 @@
 #include <stdio.h>
 
 int is_out_of_bound(int col, int line) {
-  // x = [0, BOARD_WIDTH[ AND y = [0, BOARD_HEIGHT[
+  // x = [0, BOARD_WIDTH[ AND y = [-inf, BOARD_HEIGHT[
   // Out of Bound ? Yes, return 1 else return 0
-  return !(col >= 0 && col < BOARD_WIDTH) || !(line < BOARD_HEIGHT);
+  return !(col >= 0 && col < BOARD_WIDTH) || line >= BOARD_HEIGHT;
 }
 
-void init_board(Board *board, Shape value) {
+void init(Board *board, Shape value) {
   for(uint8_t line = 0; line < BOARD_HEIGHT; line++) {
     for(uint8_t col = 0; col < BOARD_WIDTH; col++) {
       // cast to (struct Board *) to avoid warnings
@@ -20,13 +20,11 @@ void init_board(Board *board, Shape value) {
 }
 
 // Use for debug purposes
-void display_board(Board *board) {
-  Shape tmp;
+void show(Board *board) {
   for(uint8_t line = 0; line < BOARD_HEIGHT; line++) {
     for(uint8_t col = 0; col < BOARD_WIDTH; col++) {
       // cast to (struct Board *) to avoid warnings
-      tmp = board->get((struct Board *) board, col, line);
-      printf("%d ", (int) tmp);
+      printf("%d ", (int) board->get((struct Board *) board, col, line));
     }
     printf("\n");
   }
@@ -36,7 +34,7 @@ void display_board(Board *board) {
 Shape get(Board *board, uint8_t col, uint8_t line) {
   // x = selected case in the line x (column), y = selected line
   if(is_out_of_bound(col, line)) {
-    return ERROR;
+    return -1;
   }
 
   return board->array[line][col];

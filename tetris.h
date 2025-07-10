@@ -11,6 +11,7 @@
 typedef struct {
     Board board;
     bool  running;
+    uint32_t score;
 } Tetris_game;
 
 void spawn_new_shape(Shape shape_to_place, uint8_t shape_position, Shape_Coord *new_shape_coord);
@@ -20,6 +21,6 @@ void clear_shape_from_board(Shape_Coord shape_coord, Board *board);
 int  shape_out_of_bound(Shape_Coord *shape_coord, int x_increment, int y_increment);
 int  can_shape_go_down(Shape_Coord shape_coord, Board board);
 void update_shapes_until_in_bound(Shape shape_to_place, uint8_t shape_position, Shape_Coord *shape_coord);
-
+void check_for_full_lines(Board *board);
 
 #endif //NAME_TETRIS_H

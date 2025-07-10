@@ -1,12 +1,10 @@
 //
 // Created by thoma on 05.07.2025.
 //
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include "display.h"
 #include "settings.h"
-
 
 void init_display(SDL_display *display) {
 
@@ -99,15 +97,15 @@ void draw_board_game(SDL_display *display) {
 void play_tetris(SDL_display *display) {
 
   // Set up the function pointer
-  display->game->board.init_board = (void (*)(struct Board *, Shape)) init_board;
-  display->game->board.display_board = (void (*)(struct Board *)) display_board;
+  display->game->board.init = (void (*)(struct Board *, Shape)) init;
+  display->game->board.show = (void (*)(struct Board *)) show;
   display->game->board.put = (int (*)(struct Board *, uint8_t, uint8_t, Shape)) put;
   display->game->board.get = (Shape (*)(struct Board *, uint8_t, uint8_t)) get;
   // Init the game board
   display->game->running = true;
-  display->game->board.init_board((struct Board *) &display->game->board, EMPTY);
+  display->game->board.init((struct Board *) &display->game->board, EMPTY);
   // TODO : REMOVE DEBUG USAGE ONLY
-  display->game->board.display_board((struct Board *) &display->game->board);
+  display->game->board.show((struct Board *) &display->game->board);
 
   // Count down before going down
   uint16_t count_down = 0;
@@ -116,8 +114,7 @@ void play_tetris(SDL_display *display) {
   // Set up random (fixed time)
   srand(time(NULL));
   // Select a shape between 1 and 7 (0 = EMPTY)
-  // Shape shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
-  Shape shape_to_place = RECTANGLE;
+  Shape shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
   // Generate a new
   Shape_Coord new_shape_coord;
   Shape_Coord old_shape_coord;
@@ -127,7 +124,7 @@ void play_tetris(SDL_display *display) {
   affect_shape_to_board(shape_to_place, new_shape_coord, &display->game->board);
 
   // TODO : REMOVE DEBUG USAGE ONLY
-  display->game->board.display_board((struct Board *) &display->game->board);
+  display->game->board.show((struct Board *) &display->game->board);
 
   // animation loop
   while (display->game->running) {
@@ -183,9 +180,12 @@ void play_tetris(SDL_display *display) {
       shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
       shape_position = 0;
       spawn_new_shape(shape_to_place, shape_position, &new_shape_coord);
+      // TODO : Check for possible glitch ?
+      check_for_full_lines(&display->game->board);
     } else {
       clear_shape_from_board(old_shape_coord, &display->game->board);
       compute_pixels_shape(shape_to_place, shape_position, &new_shape_coord);
+
     }
 
     old_shape_coord = new_shape_coord;
