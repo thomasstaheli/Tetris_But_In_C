@@ -1,6 +1,9 @@
-//
-// Created by thoma on 07.07.2025.
-//
+/**
+ * @file    shape.h
+ * @author  Thomas Stäheli
+ * @date    06 July 2025
+ * @brief   File that all the information about a Shape
+ */
 
 #ifndef NAME_SHAPE_H
 #define NAME_SHAPE_H

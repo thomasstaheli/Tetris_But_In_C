@@ -1,15 +1,20 @@
-//
-// Created by thoma on 05.07.2025.
-//
+/**
+ * @file    display.c
+ * @author  Thomas Stäheli
+ * @date    06 July 2025
+ * @brief   File that contain the game display (using SDL2)
+ */
+
 #include <stdlib.h>
 #include <time.h>
 #include "display.h"
 #include "settings.h"
 
+// Init the display using SDL2 library
 void init_display(SDL_display *display) {
 
   SDL_Init(SDL_INIT_VIDEO);
-
+  // Create the window
   display->window = SDL_CreateWindow(
           "Tetris in C",
           SDL_WINDOWPOS_CENTERED,
@@ -17,33 +22,31 @@ void init_display(SDL_display *display) {
           DISPLAY_WIDTH, DISPLAY_HEIGHT,
           SDL_WINDOW_SHOWN
   );
-
+  // Create the renderer
   display->renderer = SDL_CreateRenderer(display->window, -1, SDL_RENDERER_ACCELERATED);
 
-  Color backgroundColor = {0, 0, 0, 255};
-
-  SDL_SetRenderDrawColor(display->renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+  Color background_color = {0, 0, 0, 255};
+  // Set up the background
+  SDL_SetRenderDrawColor(display->renderer, background_color.r, background_color.g, background_color.b, background_color.a);
   SDL_RenderClear(display->renderer);
   SDL_RenderPresent(display->renderer);
-
 }
 
+// Call this method before exiting the main program
 void remove_display(SDL_display *display) {
-
+  // Destroy / Free dynamic structures
   SDL_DestroyRenderer(display->renderer);
   SDL_DestroyWindow(display->window);
   SDL_Quit();
-
 }
 
 void clear_display(SDL_display *display) {
-
   // Background color as black
   SDL_SetRenderDrawColor(display->renderer, BLACK.r, BLACK.g, BLACK.b, BLACK.a);
   SDL_RenderClear(display->renderer);
-
 }
 
+// Draw the grid (white lines)
 void draw_grid_game(SDL_display *display) {
 
   // Compute the menu bar place depending on the display size
@@ -70,6 +73,7 @@ void draw_grid_game(SDL_display *display) {
 
 }
 
+// Draw each pixel from the board
 void draw_board_game(SDL_display *display) {
 
   // Compute the menu bar place depending on the display size
@@ -94,40 +98,37 @@ void draw_board_game(SDL_display *display) {
 
 }
 
+// Main function of the program, if you call it, it will start the game
 void play_tetris(SDL_display *display) {
 
-  // Set up the function pointer
-  display->game->board.init = (void (*)(struct Board *, Shape)) init;
-  display->game->board.show = (void (*)(struct Board *)) show;
-  display->game->board.put = (int (*)(struct Board *, uint8_t, uint8_t, Shape)) put;
-  display->game->board.get = (Shape (*)(struct Board *, uint8_t, uint8_t)) get;
+  init_board_features(&display->game->board);
   // Init the game board
   display->game->running = true;
   display->game->board.init((struct Board *) &display->game->board, EMPTY);
-  // TODO : REMOVE DEBUG USAGE ONLY
-  display->game->board.show((struct Board *) &display->game->board);
 
   // Count down before going down
+  // TODO : PUT THIS VARIABLE IN THE GAME STRUCTURE
   uint16_t count_down = 0;
-  uint16_t count_down_limit = 60;
+  uint16_t count_down_limit = DEFAULT_COUNT_DOWN_LIMIT;
   // Default position of the shape
+  // TODO : PUT THIS VARIABLE IN THE GAME STRUCTURE
   uint8_t shape_position = 0;
   // Set up random (fixed time)
   srand(time(NULL));
+  // TODO : PUT THIS VARIABLE IN THE GAME STRUCTURE
   // Select a shape between 1 and 7 (0 = EMPTY)
   Shape shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
-  // Generate a new
   Shape_Coord new_shape_coord;
   Shape_Coord old_shape_coord;
   Shape_Coord tmp_shape_coord;
+  // Generate a new random shape and compute the pixel from the origin
   spawn_new_shape(shape_to_place, shape_position, &new_shape_coord);
+  // Set up the old shape (useful to clear)
   old_shape_coord = new_shape_coord;
+  // Put the shape in the game board
   affect_shape_to_board(shape_to_place, new_shape_coord, &display->game->board);
 
-  // TODO : REMOVE DEBUG USAGE ONLY
-  display->game->board.show((struct Board *) &display->game->board);
-
-  // animation loop
+  // Main loop
   while (display->game->running) {
     SDL_Event event;
 
@@ -146,30 +147,35 @@ void play_tetris(SDL_display *display) {
             case SDL_SCANCODE_W:
             case SDL_SCANCODE_UP:
               shape_position = (shape_position + 1) % POSITION_PER_SHAPES;
+              // pre-computing the shape to know if this position is out of bound
               compute_pixels_shape(shape_to_place, shape_position, &new_shape_coord);
               // Check if shapes is out of bound after changing position
               update_shapes_until_in_bound(shape_to_place, shape_position, &new_shape_coord);
               break;
-            case SDL_SCANCODE_A:
-            case SDL_SCANCODE_LEFT:
-              // TODO : CHECK FOR OTHERS SHAPES, for now I can go throw shapes
-              tmp_shape_coord = new_shape_coord;
-              if(!shape_out_of_bound(&tmp_shape_coord, -1, 0)) {
-                new_shape_coord = tmp_shape_coord;
-              }
-              break;
             case SDL_SCANCODE_S:
             case SDL_SCANCODE_DOWN:
+              /* TODO : THERE IS A CHANCE THAT THE USER PRESS DOWN KEY AND THE COUNTDOWN APPEND AT THE SAME TIME,
+                        IT WILL GO THROW A SHAPE OR THE BOARD !
+              */
               tmp_shape_coord = new_shape_coord;
-              if(!shape_out_of_bound(&tmp_shape_coord, 0, 1))  {
+              if(!is_shape_out_of_bound(&tmp_shape_coord, 0, 1))  {
                 new_shape_coord = tmp_shape_coord;
               }
               break;
+            case SDL_SCANCODE_A:
+            case SDL_SCANCODE_LEFT:
+              // TODO : CHECK FOR OTHERS SHAPES, for now I can go throw shapes (colliding pixels)
+              tmp_shape_coord = new_shape_coord;
+              if(!is_shape_out_of_bound(&tmp_shape_coord, -1, 0)) {
+                new_shape_coord = tmp_shape_coord;
+              }
+              break;
+
             case SDL_SCANCODE_D:
             case SDL_SCANCODE_RIGHT:
-              // TODO : CHECK FOR OTHERS SHAPES, for now I can go throw shapes
+              // TODO : CHECK FOR OTHERS SHAPES, for now I can go throw shapes (colliding pixels)
               tmp_shape_coord = new_shape_coord;
-              if(!shape_out_of_bound(&tmp_shape_coord, 1, 0)) {
+              if(!is_shape_out_of_bound(&tmp_shape_coord, 1, 0)) {
                 new_shape_coord = tmp_shape_coord;
               }
               break;
@@ -178,13 +184,16 @@ void play_tetris(SDL_display *display) {
           }
       }
     }
-
+    // Check if the shape collides with another shape or reach the end on the board
     if(!can_shape_go_down(old_shape_coord, display->game->board)) {
+      // Generate a new shape
       shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
       shape_position = 0;
       spawn_new_shape(shape_to_place, shape_position, &new_shape_coord);
+      // Erase lines that are full of shape's pixels
       check_for_full_lines(&display->game->board);
     } else {
+      // Clear the old shape
       clear_shape_from_board(old_shape_coord, &display->game->board);
       if(count_down != 0 && count_down % count_down_limit == 0) {
         count_down = 0;
@@ -193,12 +202,14 @@ void play_tetris(SDL_display *display) {
       } else {
         count_down += 1;
       }
+      // Compute the pixel from the new shape's origin
       compute_pixels_shape(shape_to_place, shape_position, &new_shape_coord);
     }
-
+    // Put the shape in the board before drawing it
     old_shape_coord = new_shape_coord;
     affect_shape_to_board(shape_to_place, new_shape_coord, &display->game->board);
 
+    // Clear and draw the game
     clear_display(display);
     draw_board_game(display);
     draw_grid_game(display);

@@ -1,8 +1,20 @@
-//
-// Created by thoma on 06.07.2025.
-//
+/**
+ * @file    board.h
+ * @author  Thomas Stäheli
+ * @date    06 July 2025
+ * @brief   Structure with function pointer to use a 2D Table (Board)
+ */
+
 #include "board.h"
 #include <stdio.h>
+
+void init_board_features(Board *board) {
+  // Set up the function pointer
+  board->init = (void (*)(struct Board *, Shape)) init;
+  board->show = (void (*)(struct Board *)) show;
+  board->put  = (int (*)(struct Board *, uint8_t, uint8_t, Shape)) put;
+  board->get  = (Shape (*)(struct Board *, uint8_t, uint8_t)) get;
+}
 
 int is_out_of_bound(int col, int line) {
   // x = [0, BOARD_WIDTH[ AND y = [-inf, BOARD_HEIGHT[

@@ -1,6 +1,9 @@
-//
-// Created by thoma on 06.07.2025.
-//
+/**
+ * @file    board.h
+ * @author  Thomas Stäheli
+ * @date    06 July 2025
+ * @brief   Structure with function pointer to use a 2D Table (Board)
+ */
 
 #ifndef NAME_BOARD_H
 #define NAME_BOARD_H
@@ -19,6 +22,7 @@ typedef struct {
   int   (*put)(struct Board *, uint8_t col, uint8_t line, Shape value);
 } Board;
 
+void  init_board_features(Board *board);
 void  init(Board *board, Shape value);
 void  show(Board *board);
 Shape get(Board *board, uint8_t col, uint8_t line);

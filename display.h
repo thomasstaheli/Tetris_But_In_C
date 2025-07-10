@@ -1,6 +1,9 @@
-//
-// Created by thoma on 05.07.2025.
-//
+/**
+ * @file    display.h
+ * @author  Thomas Stäheli
+ * @date    06 July 2025
+ * @brief   File that contain the game display (using SDL2)
+ */
 
 #ifndef NAME_DISPLAY_H
 #define NAME_DISPLAY_H

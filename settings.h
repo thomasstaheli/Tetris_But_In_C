@@ -1,6 +1,9 @@
-//
-// Created by thoma on 06.07.2025.
-//
+/**
+ * @file    settings.h
+ * @author  Thomas Stäheli
+ * @date    06 July 2025
+ * @brief   File that contains only define For the whole game
+ */
 
 #ifndef NAME_SETTINGS_H
 #define NAME_SETTINGS_H
@@ -19,5 +22,8 @@
 
 // FPS SETTINGS
 #define FPS              60
+
+// COUNT DOWN DEFAULT TIME
+#define DEFAULT_COUNT_DOWN_LIMIT  60
 
 #endif //NAME_SETTINGS_H

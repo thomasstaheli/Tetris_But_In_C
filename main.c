@@ -1,3 +1,10 @@
+/**
+ * @file    main.c
+ * @author  Thomas Stäheli
+ * @date    06 July 2025
+ * @brief   Use the tetris game
+ */
+
 #include <stdio.h>
 #include "display.h"
 #include "tetris.h"
