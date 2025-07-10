@@ -17,4 +17,7 @@
 // MENU BAR SIZE
 #define MENU_BAR_SIZE   300
 
+// FPS SETTINGS
+#define FPS              60
+
 #endif //NAME_SETTINGS_H

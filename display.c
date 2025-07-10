@@ -109,6 +109,7 @@ void play_tetris(SDL_display *display) {
 
   // Count down before going down
   uint16_t count_down = 0;
+  uint16_t count_down_limit = 60;
   // Default position of the shape
   uint8_t shape_position = 0;
   // Set up random (fixed time)
@@ -151,6 +152,7 @@ void play_tetris(SDL_display *display) {
               break;
             case SDL_SCANCODE_A:
             case SDL_SCANCODE_LEFT:
+              // TODO : CHECK FOR OTHERS SHAPES, for now I can go throw shapes
               tmp_shape_coord = new_shape_coord;
               if(!shape_out_of_bound(&tmp_shape_coord, -1, 0)) {
                 new_shape_coord = tmp_shape_coord;
@@ -159,12 +161,13 @@ void play_tetris(SDL_display *display) {
             case SDL_SCANCODE_S:
             case SDL_SCANCODE_DOWN:
               tmp_shape_coord = new_shape_coord;
-              if(!shape_out_of_bound(&tmp_shape_coord, 0, 1)) {
+              if(!shape_out_of_bound(&tmp_shape_coord, 0, 1))  {
                 new_shape_coord = tmp_shape_coord;
               }
               break;
             case SDL_SCANCODE_D:
             case SDL_SCANCODE_RIGHT:
+              // TODO : CHECK FOR OTHERS SHAPES, for now I can go throw shapes
               tmp_shape_coord = new_shape_coord;
               if(!shape_out_of_bound(&tmp_shape_coord, 1, 0)) {
                 new_shape_coord = tmp_shape_coord;
@@ -180,12 +183,17 @@ void play_tetris(SDL_display *display) {
       shape_to_place = rand() % NUMBER_OF_SHAPES + 1;
       shape_position = 0;
       spawn_new_shape(shape_to_place, shape_position, &new_shape_coord);
-      // TODO : Check for possible glitch ?
       check_for_full_lines(&display->game->board);
     } else {
       clear_shape_from_board(old_shape_coord, &display->game->board);
+      if(count_down != 0 && count_down % count_down_limit == 0) {
+        count_down = 0;
+        // Automatically going down after countdown
+        new_shape_coord.coord[0].y += 1;
+      } else {
+        count_down += 1;
+      }
       compute_pixels_shape(shape_to_place, shape_position, &new_shape_coord);
-
     }
 
     old_shape_coord = new_shape_coord;
@@ -200,7 +208,8 @@ void play_tetris(SDL_display *display) {
     SDL_RenderPresent(display->renderer);
 
     // calculates to 60 fps
-    SDL_Delay(1000 / 60);
+    // 1 s = 60 imgs / 16.6667 ms
+    SDL_Delay(1000 / FPS);
   }
 
 }
